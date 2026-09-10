@@ -91,12 +91,16 @@ def show_login_signup():
             elif new_password != confirm_password:
                 st.warning("Passwords do not match.")
             else:
-                success = create_user(new_username, new_password)
-                if success:
+                result = create_user(new_username, new_password)
+
+                if result == "success":
                     st.success("Account created! Please log in using the Login tab.")
-                else:
+
+                elif result == "duplicate":
                     st.error("That username is already taken.")
 
+                elif result == "db_error":
+                    st.error("Could not connect to the database. Please try again later.")
 
 # --- THE GATE ---
 if "logged_in" not in st.session_state:
