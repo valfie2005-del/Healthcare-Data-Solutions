@@ -8,34 +8,19 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-# ============================================================
-# DATABASE CONFIGURATION
-# ============================================================
-
 def get_secret(name, default=None):
-    """
-    Get configuration from Streamlit Cloud secrets first.
-    If running locally, fall back to environment variables.
-    """
     try:
-        if name in st.secrets:
-            return st.secrets[name]
+        return st.secrets[name]
     except Exception:
-        pass
-
-    return os.getenv(name, default)
+        return os.getenv(name, default)
 
 
 DB_HOST = get_secret("MYSQL_HOST")
+DB_PORT = int(get_secret("MYSQL_PORT", 3306))
 DB_USER = get_secret("MYSQL_USER")
 DB_PASSWORD = get_secret("MYSQL_PASSWORD")
 DB_NAME = get_secret("MYSQL_DATABASE", "pubmed_app")
-DB_PORT = int(get_secret("MYSQL_PORT", 3306))
 
-
-# ============================================================
-# MYSQL CONNECTION
-# ============================================================
 
 def get_connection():
     try:
@@ -52,7 +37,6 @@ def get_connection():
     except Error as e:
         print(f"MySQL connection error: {e}")
         return None
-
 
 # ============================================================
 # DATABASE / TABLE SETUP
